@@ -33,6 +33,12 @@ public interface Time {
 	 */
 	public short[] getHMS();
 	
+
+	/**
+	 * @return the number of seconds from midnight.
+	 */
+	public long getSecondsFromMidnight();
+	
 	/**
 	 * @param hour
 	 * update the hours to be the new parameter.
@@ -56,7 +62,13 @@ public interface Time {
 	 * update the time to represent the time in the parameter.
 	 */
 	public void setHMS(short[] hms);
-
+	
+	/**
+	 * @param secondsFromMidnigt
+	 * update the time to represent the time according to the parameter.
+	 */
+	public void setSecondsFromMidnight(long secondsFromMidnigt);
+	
 	/**
 	 * @param t
 	 * @return return true if this instance represents the same time as t. Otherwise return false
