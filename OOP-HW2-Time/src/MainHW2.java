@@ -11,7 +11,7 @@ public class MainHW2 {
 		t1.setHour((short) 7);
 		System.out.println("t1 " + t1);
 		t2.setHour((short) 7);
-		System.out.println("t1 " + t1);
+		System.out.println("t2 " + t2);
 	}
 
 }
