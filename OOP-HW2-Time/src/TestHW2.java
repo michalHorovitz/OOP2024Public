@@ -1,7 +1,6 @@
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -88,13 +87,17 @@ public class TestHW2 {
 		assertEquals(timeArr2[1], time1_2.getMinute());
 		assertEquals(timeArr2[2], time1_2.getSecond());
 		assertEquals(time1_2.getSecondsFromMidnight(), secondsHMSfromMidnight(timeArr2));
-		chackEqualsHMS(timeArr2, time1_2.getHMS());
+		short[] hms = time1_2.getHMS();
+		chackEqualsHMS(timeArr2, hms);
+		hms[0] = 0;
+		assertEquals(timeArr2[0], time1_2.getHour());
 
 		assertEquals(timeArr1[0], time2_1.getHour());
 		assertEquals(timeArr1[1], time2_1.getMinute());
 		assertEquals(timeArr1[2], time2_1.getSecond());
 		assertEquals(time2_1.getSecondsFromMidnight(), secondsHMSfromMidnight(timeArr1));
 		chackEqualsHMS(timeArr1, time2_1.getHMS());
+
 	}
 
 	@Test
@@ -104,6 +107,8 @@ public class TestHW2 {
 
 		time2_2.setHMS(timeArr1);
 		chackEqualsHMS(timeArr1, time2_2.getHMS());
+		timeArr1[0] = 0;
+		assertNotEquals(timeArr1[0], time2_2.getHour());
 
 		time1_1.setHour((short) 1);
 		assertEquals(time1_1.getHour(), 1);
