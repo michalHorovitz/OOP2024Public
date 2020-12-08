@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-import exceptionsTypes.InputDateException;
+import exceptionsTypes.InputTimeException;
 
 /**
  * @author Ron Sivan (ronny.sivan@gmail.com)
@@ -30,7 +30,7 @@ public class Time {
 		sec = s;
 	}
 	
-	public Time(String time) throws InputDateException {
+	public Time(String time) throws InputTimeException {
 		Scanner paramsScan = new Scanner(time);
 		try {
 			paramsScan.useDelimiter(":");
@@ -38,7 +38,7 @@ public class Time {
 			min = paramsScan.nextShort();
 			sec = paramsScan.nextShort();
 		} catch (Exception e) {
-			throw new InputDateException("Exception in scanning the time string");
+			throw new InputTimeException("Exception in scanning the time string");
 		} finally {
 			paramsScan.close();
 		}
@@ -90,19 +90,25 @@ public class Time {
 	}
 
 	/**
-	 * @param t
+	 * @param t 
 	 * @return return true if this instance represents the same time as t. Otherwise
-	 *         return false
+	 *         return false.
+	 *         If t is null return false
 	 */
 	public boolean equals(Time t) {
+		if (t==null)
+			return false;
 		return ((getHour() == t.getHour()) && (getMinute() == t.getMinute()) && (getSecond() == t.getSecond()));
 	}
 
 	/**
 	 * @param t
 	 * @return return true if this instance is before t. Otherwise return false
+	 *         If t is null return false
 	 */
 	public boolean before(Time t) {
+		if (t==null)
+			return false;
 		if (getHour() < t.getHour())
 			return true;
 		else if (getHour() > t.getHour())
@@ -120,6 +126,7 @@ public class Time {
 	/**
 	 * @param t
 	 * @return return true if this instance is after t. Otherwise return false
+	 *         If t is null return false
 	 */
 	public boolean after(Time t) {
 		if (equals(t))
