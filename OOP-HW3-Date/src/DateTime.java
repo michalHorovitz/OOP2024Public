@@ -72,7 +72,5 @@ public class DateTime {
 	@Override
 	public String toString() {
 	}
-	
-	try
 
 }
