@@ -1,16 +1,11 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.xml.internal.messaging.saaj.soap.ver1_1.Detail1_1Impl;
-
-import exceptionsTypes.InputDateException;
 import exceptionsTypes.InputTimeException;
-import sun.util.resources.cldr.es.TimeZoneNames_es_419;
 
 public class TestPartADateTime {
 
