@@ -6,6 +6,11 @@ public class DateUtils {
 
 	private static final int DAYS_IN_MONTH[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
+	/**
+	 * @param month
+	 * @param year
+	 * @return the last day in the month in this year
+	 */
 	public static int getLastDayOfGregorianMonth(int month, int year) {
 		if ((month == 2) && ((year % 4) == 0) && ((year % 400) != 100) && ((year % 400) != 200)
 				&& ((year % 400) != 300))
@@ -14,6 +19,12 @@ public class DateUtils {
 			return DAYS_IN_MONTH[month - 1];
 	}
 
+	/**
+	 * @param gregorian
+	 *            date
+	 * @return the number of days from the first day of the Gregorian calendar That
+	 *         is, it returns the number of days from "Gregorian data 01/01/0001"
+	 */
 	public static int absoluteFromGregorianDate(GregorianDate date) {
 		int value, m;
 
@@ -39,6 +50,11 @@ public class DateUtils {
 		return (value);
 	}
 
+	/**
+	 * @param absDate
+	 *            - the number of days from "Gregorian data 01/01/0001"
+	 * @return the Gregorian date which is suitable to the absDate.
+	 */
 	public static GregorianDate gregorianDateFromAbsolute(int absDate) {
 		int approx, y, m, day, month, year, temp;
 
@@ -72,6 +88,10 @@ public class DateUtils {
 		return new GregorianDate(day, month, year);
 	}
 
+	/**
+	 * @param year
+	 * @return if the year is leap
+	 */
 	public static boolean hebrewLeapYear(int year) {
 		if ((((year * 7) + 1) % 19) < 7)
 			return true;
@@ -79,6 +99,10 @@ public class DateUtils {
 			return false;
 	}
 
+	/**
+	 * @param year
+	 * @return the last month in the year (13 if the year is leap. Otherwise 12).
+	 */
 	public static int getLastMonthOfJewishYear(int year) {
 		if (hebrewLeapYear(year))
 			return 13;
@@ -86,6 +110,11 @@ public class DateUtils {
 			return 12;
 	}
 
+	/**
+	 * @param month
+	 * @param year
+	 * @return the last day in the month
+	 */
 	public static int getLastDayOfJewishMonth(int month, int year) {
 		if ((month == 2) || (month == 4) || (month == 6) || (month == 10) || (month == 13))
 			return 29;
@@ -96,6 +125,94 @@ public class DateUtils {
 		if ((month == 9) && (shortKislev(year)))
 			return 29;
 		return 30;
+	}
+
+	/**
+	 * @param Jewish
+	 *            date
+	 * @return the number of days from the first day of the Gregorian calendar That
+	 *         is, it returns the number of days from "Gregorian data 01/01/0001"
+	 */
+	public static int absoluteFromJewishDate(JewishDate date) {
+		int value, returnValue, m;
+
+		/* Days so far this month */
+		value = date.getDay();
+		returnValue = value;
+
+		/* If before Tishrei */
+		if (date.getMonth() < 7) {
+			/* Then add days in prior months this year before and */
+			/* after Nisan. */
+			for (m = 7; m <= getLastMonthOfJewishYear(date.getYear()); m++) {
+				value = getLastDayOfJewishMonth(m, date.getYear());
+				returnValue += value;
+			}
+			for (m = 1; m < date.getMonth(); m++) {
+				value = getLastDayOfJewishMonth(m, date.getYear());
+				returnValue += value;
+			}
+		} else {
+			for (m = 7; m < date.getMonth(); m++) {
+				value = getLastDayOfJewishMonth(m, date.getYear());
+				returnValue += value;
+			}
+		}
+
+		/* Days in prior years */
+		value = hebrewCalendarElapsedDays(date.getYear());
+		returnValue += value;
+
+		/* Days elapsed before absolute date 1 */
+		value = 1373429;
+		returnValue -= value;
+
+		return (returnValue);
+	}
+
+	/**
+	 * @param absDate
+	 *            - the number of days from "Gregorian data 01/01/0001"
+	 * @return the Jewish date which is suitable to the absDate.
+	 */
+	public static JewishDate jewishDateFromAbsolute(int absDate) {
+		int approx, y, m, year, month, day, temp, start;
+
+		/* Approximation */
+		approx = (absDate + 1373429) / 366;
+
+		/* Search forward from the approximation */
+		y = approx;
+		for (;;) {
+			temp = absoluteFromJewishDate(new JewishDate(1, 7, (y + 1)));
+			if (absDate < temp)
+				break;
+			y++;
+		}
+		year = y;
+
+		/* Starting month for search for month */
+		temp = absoluteFromJewishDate(new JewishDate(1, 1, year));
+		if (absDate < temp)
+			start = 7;
+		else
+			start = 1;
+
+		/* Search forward from either Tishri or Nisan */
+		m = start;
+		for (;;) {
+			temp = absoluteFromJewishDate(new JewishDate((getLastDayOfJewishMonth(m, year)), m, year));
+			if (absDate <= temp)
+				break;
+			m++;
+		}
+		month = m;
+
+		/* Calculate the day by subtraction */
+		temp = absoluteFromJewishDate(new JewishDate(1, month, year));
+		day = absDate - temp + 1;
+
+		return new JewishDate(day, month, year);
 	}
 
 	private static int hebrewCalendarElapsedDays(int year) {
@@ -172,80 +289,4 @@ public class DateUtils {
 			return false;
 	}
 
-	public static int absoluteFromJewishDate(JewishDate date) {
-		int value, returnValue, m;
-
-		/* Days so far this month */
-		value = date.getDay();
-		returnValue = value;
-
-		/* If before Tishrei */
-		if (date.getMonth() < 7) {
-			/* Then add days in prior months this year before and */
-			/* after Nisan. */
-			for (m = 7; m <= getLastMonthOfJewishYear(date.getYear()); m++) {
-				value = getLastDayOfJewishMonth(m, date.getYear());
-				returnValue += value;
-			}
-			for (m = 1; m < date.getMonth(); m++) {
-				value = getLastDayOfJewishMonth(m, date.getYear());
-				returnValue += value;
-			}
-		} else {
-			for (m = 7; m < date.getMonth(); m++) {
-				value = getLastDayOfJewishMonth(m, date.getYear());
-				returnValue += value;
-			}
-		}
-
-		/* Days in prior years */
-		value = hebrewCalendarElapsedDays(date.getYear());
-		returnValue += value;
-
-		/* Days elapsed before absolute date 1 */
-		value = 1373429;
-		returnValue -= value;
-
-		return (returnValue);
-	}
-
-	public static JewishDate jewishDateFromAbsolute(int absDate) {
-		int approx, y, m, year, month, day, temp, start;
-
-		/* Approximation */
-		approx = (absDate + 1373429) / 366;
-
-		/* Search forward from the approximation */
-		y = approx;
-		for (;;) {
-			temp = absoluteFromJewishDate(new JewishDate(1, 7, (y + 1)));
-			if (absDate < temp)
-				break;
-			y++;
-		}
-		year = y;
-
-		/* Starting month for search for month */
-		temp = absoluteFromJewishDate(new JewishDate(1, 1, year));
-		if (absDate < temp)
-			start = 7;
-		else
-			start = 1;
-
-		/* Search forward from either Tishri or Nisan */
-		m = start;
-		for (;;) {
-			temp = absoluteFromJewishDate(new JewishDate((getLastDayOfJewishMonth(m, year)), m, year));
-			if (absDate <= temp)
-				break;
-			m++;
-		}
-		month = m;
-
-		/* Calculate the day by subtraction */
-		temp = absoluteFromJewishDate(new JewishDate(1, month, year));
-		day = absDate - temp + 1;
-
-		return new JewishDate(day, month, year);
-	}
 }
