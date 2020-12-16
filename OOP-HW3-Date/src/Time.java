@@ -25,18 +25,18 @@ public class Time {
 	}
 
 	public Time(short h, short m, short s) {
-		hour = h;
-		min = m;
-		sec = s;
+		setHour(h);
+		setMinute(m);
+		setSecond(s);
 	}
-	
+
 	public Time(String time) throws InputTimeException {
 		Scanner paramsScan = new Scanner(time);
 		try {
 			paramsScan.useDelimiter(":");
-			hour = paramsScan.nextShort();
-			min = paramsScan.nextShort();
-			sec = paramsScan.nextShort();
+			setHour(paramsScan.nextShort());
+			setMinute(paramsScan.nextShort());
+			setSecond(paramsScan.nextShort());
 		} catch (Exception e) {
 			throw new InputTimeException("Exception in scanning the time string");
 		} finally {
@@ -70,6 +70,8 @@ public class Time {
 	 *            update the hours to be the new parameter.
 	 */
 	public void setHour(short hour) {
+		if ((hour > 23) || (hour < 0))
+			throw new IllegalArgumentException("Hour argument " + hour + " is illegal.");
 		this.hour = hour;
 	}
 
@@ -78,6 +80,8 @@ public class Time {
 	 *            update the minutes to be the new parameter.
 	 */
 	public void setMinute(short min) {
+		if ((hour > 60) || (hour < 0))
+			throw new IllegalArgumentException("Hour argument " + hour + " is illegal.");
 		this.min = min;
 	}
 
@@ -86,28 +90,29 @@ public class Time {
 	 *            update the seconds to be the new parameter.
 	 */
 	public void setSecond(short sec) {
+		if ((hour > 60) || (hour < 0))
+			throw new IllegalArgumentException("Hour argument " + hour + " is illegal.");
 		this.sec = sec;
 	}
 
 	/**
-	 * @param t 
+	 * @param t
 	 * @return return true if this instance represents the same time as t. Otherwise
-	 *         return false.
-	 *         If t is null return false
+	 *         return false. If t is null return false
 	 */
 	public boolean equals(Time t) {
-		if (t==null)
+		if (t == null)
 			return false;
 		return ((getHour() == t.getHour()) && (getMinute() == t.getMinute()) && (getSecond() == t.getSecond()));
 	}
 
 	/**
 	 * @param t
-	 * @return return true if this instance is before t. Otherwise return false
-	 *         If t is null return false
+	 * @return return true if this instance is before t. Otherwise return false If t
+	 *         is null return false
 	 */
 	public boolean before(Time t) {
-		if (t==null)
+		if (t == null)
 			return false;
 		if (getHour() < t.getHour())
 			return true;
@@ -125,8 +130,8 @@ public class Time {
 
 	/**
 	 * @param t
-	 * @return return true if this instance is after t. Otherwise return false
-	 *         If t is null return false
+	 * @return return true if this instance is after t. Otherwise return false If t
+	 *         is null return false
 	 */
 	public boolean after(Time t) {
 		if (equals(t))
