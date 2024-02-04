@@ -143,8 +143,8 @@ public class TestHW2 {
 
 		System.out.println(time1_1.difference(time2_2));
 		System.out.println(secondsHMSfromMidnight(timeArr2));
-		assertEquals(time1_1.difference(time2_2), -secondsHMSfromMidnight(timeArr2));
-		assertEquals(time2_2.difference(time1_1), secondsHMSfromMidnight(timeArr2));
+		assertEquals(time1_1.difference(time2_2), secondsHMSfromMidnight(timeArr2));
+		assertEquals(time2_2.difference(time1_1), -secondsHMSfromMidnight(timeArr2));
 	}
 
 	@Test
