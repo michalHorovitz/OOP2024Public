@@ -15,7 +15,7 @@ public interface IDate {
 
 	/**
 	 * @param t
-	 * @return return true if this instance represents the same data and time as t.
+	 * @return return true if this instance represents the same date and time as t.
 	 *         Otherwise return false.	 
 	 *         If t is null return false
 	 */
