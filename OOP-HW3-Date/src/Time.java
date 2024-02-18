@@ -66,8 +66,7 @@ public class Time {
 	}
 
 	/**
-	 * @param hour
-	 *            update the hours to be the new parameter.
+	 * @param hour update the hours to be the new parameter.
 	 */
 	public void setHour(short hour) {
 		if ((hour > 23) || (hour < 0))
@@ -76,8 +75,7 @@ public class Time {
 	}
 
 	/**
-	 * @param min
-	 *            update the minutes to be the new parameter.
+	 * @param min update the minutes to be the new parameter.
 	 */
 	public void setMinute(short min) {
 		if ((hour > 60) || (hour < 0))
@@ -86,8 +84,7 @@ public class Time {
 	}
 
 	/**
-	 * @param sec
-	 *            update the seconds to be the new parameter.
+	 * @param sec update the seconds to be the new parameter.
 	 */
 	public void setSecond(short sec) {
 		if ((hour > 60) || (hour < 0))
@@ -116,16 +113,16 @@ public class Time {
 			return false;
 		if (getHour() < t.getHour())
 			return true;
-		else if (getHour() > t.getHour())
+		if (getHour() > t.getHour())
 			return false;
-		else if (getMinute() < t.getMinute())
+		if (getMinute() < t.getMinute())
 			return true;
-		else if (getMinute() > t.getMinute())
+		if (getMinute() > t.getMinute())
 			return false;
-		else if (getSecond() < t.getSecond())
+		if (getSecond() < t.getSecond())
 			return true;
-		else
-			return (false);
+
+		return (false);
 	}
 
 	/**
